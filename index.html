@@ -50,19 +50,16 @@
             align-items: center;
             padding: 5px 3px 5px 3px;
             border-radius: 5px 5px 5px 5px;
-
-
-
-
         }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
         let player = 1;
+        let row, col;
+        let winningCount = 4;
+
         $(document).ready(function () {
 
-
-            var row, col;
             var dimensions = prompt("Enter dimensions in nXn format", "5x5");
 
             if (name != null) {
@@ -84,39 +81,121 @@
                     var cellCopy = $(".dummyCell").clone();
 
                     addStylingToCell(cellCopy, i, j, row, col);
-
-
-
-
                 }
-
             }
 
-
             $(".cell").click(function () {
-
-
                 //write the alphabet based on player
                 performMove($(this));
-                checkHorizontal($(this))
-
-                //check winning condition
-                //check horizontal
-                //check vertical
-                ///check diagonal
+                checkWinningConditions($(this));
 
             });
 
         });
 
-        function checkHorizontal(myCellObj) {
-            let col=myCellObj.attr("col");
-            //alert("#cell_"+myCellObj.attr("row")+"x"+(Number(col)+Number(1))); 
-            
-            var nextObj="$(#cell_"+myCellObj.attr("row")+"x"+(Number(col)+Number(1))+")";
+        function checkWinningConditions(myCellObj) {
+            //check winning condition
+            checkHorizontal(myCellObj);
+            //    checkVertical(mycellObj);
+            //   checkDiagonal(mycellObj);
 
-            $("#cell_"+myCellObj.attr("row")+"x"+(Number(col)+Number(1))).click();
-            //alert("row=" + nextObj.attr("row") + ",col=" + nextObj.attr("col"));
+            //check horizontal
+            //check vertical
+            ///check diagonal
+        }
+
+
+        function checkHorizontal(myCellObj) {
+            var rowN = myCellObj.attr("row");
+            var colN = myCellObj.attr("col");
+            var mySymbol = myCellObj.attr("player");
+            var matchCount = 1;
+
+
+            //if current object is on left boundry
+            if (colN == "0") {
+                alert('left boundry');
+
+                for (let i = 1; i < winningCount; i++) {
+
+                    var nextSymbol = $("#cell_" + rowN + "x" + i).attr("player");
+
+                    if (nextSymbol === mySymbol) {
+                        matchCount++;
+                    } else {
+                        break;
+                    }
+                }
+                if (matchCount === winningCount) {
+                    alert("Player " + $("#cell_" + rowN + "x" + colN).attr("player") + " Wins!!!!");
+                }
+
+            } else if (myCellObj.attr("col") == Number(col) - 1) {
+                alert("right");
+
+                for (let i = col - 1; i > (col - winningCount); i--) {
+
+                    var nextSymbol = $("#cell_" + rowN + "x" + i).attr("player");
+                    // alert(nextSymbol);
+                    if (nextSymbol === mySymbol) {
+                        matchCount++;
+                    } else {
+                        break;
+                    }
+                }
+                if (matchCount === winningCount) {
+                    alert("Player " + $("#cell_" + rowN + "x" + colN).attr("player") + " Wins!!!!");
+                }
+
+
+            } else {
+                //     alert('middle');
+
+                //  Right Traversal
+                for (let i = (parseInt(colN) + 1); i < (winningCount + parseInt(colN)); i++) {
+                    alert(i);
+
+                    var nextSymbol = $("#cell_" + rowN + "x" + i).attr("player");
+                    if (nextSymbol === mySymbol) {
+                        matchCount++;
+                    } else {
+                        //matchCount = 1;
+                        break;
+                    }
+                }
+
+
+            //  Left Traversal
+
+                for (let i = colN - 1; i > (colN - winningCount); i--) {
+
+                    var nextSymbol = $("#cell_" + rowN + "x" + i).attr("player");
+                    
+                    if (nextSymbol === mySymbol) {
+                        matchCount++;
+                    } else {
+                        break;
+                    }
+                }
+
+                if (matchCount === winningCount) {
+                    alert("Player " + $("#cell_" + rowN + "x" + colN).attr("player") + " Wins!!!!");
+                }
+
+
+
+
+
+
+
+
+
+            }
+
+            //if current object is on right boundry
+            //if current object is in middle
+
+
         }
 
         function performMove(myCellObj) {
@@ -130,13 +209,16 @@
             if (player === 1) {
 
                 myCellObj.append("X").css("font-size", "50px");
+                myCellObj.attr("player", "1");
                 player = 2;
             }
             else if (player === 2) {
                 myCellObj.append("O").css("font-size", "50px");
+                myCellObj.attr("player", "2");
                 player = 1;
             }
             myCellObj.attr("isClicked", "1");
+
 
 
         }
@@ -156,8 +238,6 @@
 
 
         }
-
-
 
     </script>
 </head>
