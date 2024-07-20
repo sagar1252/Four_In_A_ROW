@@ -1,70 +1,177 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <style>
-    .cell {
-        visibility: hidden;
-    }
-    .para{
-        visibility: hidden;
-    }
-    #container {
-    width: 500px;
-    height: 300px;
-    background-color: red;
-    display:flex;
-    flex-wrap: wrap;
-    text-align: center;
-    justify-content: space-evenly;
-    } 
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .cell {
+            /* padding: 10px 10px 10px 10px; */
+            /* padding: 10px 10px 10px 10px; */
+            background-color: white;
+            height: auto;
+            display: flex;
+            margin-right: 20p;
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            flex-direction: row;
+            border: 1px solid white;
+            height: 100px;
+            margin-bottom: 5px;
+            border-radius: 5px 5px 5px 5px;
+        }
+
+
+
+
+        .game {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            justify-content: space-evenly;
+        }
+
+        .dummycell {
+            visibility: hidden;
+        }
+
+
+        #container {
+            width: 500px;
+            height: 100%;
+            background-color: red;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            text-align: center;
+            justify-content: space-evenly;
+            align-items: center;
+            padding: 5px 3px 5px 3px;
+            border-radius: 5px 5px 5px 5px;
+
+
+
+
+        }
     </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        let player = 1;
+        $(document).ready(function () {
 
-$(document).ready(function(){
 
+            var row, col;
+            var dimensions = prompt("Enter dimensions in nXn format", "5x5");
 
-var row,col;
-var dimensions=prompt("Enter dimensions in nXn format", "5x5");
+            if (name != null) {
+                const myArr = dimensions.split("x");
+                //alert(myArr)
+                row = myArr[0]
+                col = myArr[1]
+                x = "You chose " + row + " Rows and " + col + " Columns";
+                //  alert(x);
+            }
+            let containerHeight = $("#container").css("height");
+            //alert(containerHeight);
+            let containerWidth = $("#container").css("width");
+            //alert(containerWidth);
 
-if (name!=null){
-    const myArr=dimensions.split("x");
-    //alert(myArr)
-       row=myArr[0]
-       col=myArr[1]
-       x="You chose " + row + " Rows and "+col+" Columns";
-    //  alert(x);
-}
-let containerHeight=$("#container").css("height");
-//alert(containerHeight);
-let containerWidth=$("#container").css("width");
-//alert(containerWidth);
+            for (let i = 0; i < col; i++) {
+                for (let j = 0; j < row; j++) {
 
-for(let i=0;i<col;i++){
-    for(let j=0;j<row;j++){
-        
-    var cellCopy=$(".dummyCell").clone();
-    cellCopy.removeClass("dummyCell");
-    cellCopy.addClass("cell");
-    cellCopy.attr("row",row);
-    cellCopy.attr("col",col);
-    cellCopy.attr("id",i+"x"+j);
-    cellCopy.css("visibility","visible");
-   // alert(cellCopy.html); 
-    $("#container").append(cellCopy);  
-    }
+                    var cellCopy = $(".dummyCell").clone();
 
-}
+                    addStylingToCell(cellCopy, i, j, row, col);
 
 
 
-});
-</script>
+
+                }
+
+            }
+
+
+            $(".cell").click(function () {
+
+
+                //write the alphabet based on player
+                performMove($(this));
+                checkHorizontal($(this))
+
+                //check winning condition
+                //check horizontal
+                //check vertical
+                ///check diagonal
+
+            });
+
+        });
+
+        function checkHorizontal(myCellObj) {
+            let col=myCellObj.attr("col");
+            //alert("#cell_"+myCellObj.attr("row")+"x"+(Number(col)+Number(1))); 
+            
+            var nextObj="$(#cell_"+myCellObj.attr("row")+"x"+(Number(col)+Number(1))+")";
+
+            $("#cell_"+myCellObj.attr("row")+"x"+(Number(col)+Number(1))).click();
+            //alert("row=" + nextObj.attr("row") + ",col=" + nextObj.attr("col"));
+        }
+
+        function performMove(myCellObj) {
+            let isclicked = myCellObj.attr("isClicked");
+
+
+            if (isclicked === "1") {
+                alert("Already clicked")
+                return;
+            }
+            if (player === 1) {
+
+                myCellObj.append("X").css("font-size", "50px");
+                player = 2;
+            }
+            else if (player === 2) {
+                myCellObj.append("O").css("font-size", "50px");
+                player = 1;
+            }
+            myCellObj.attr("isClicked", "1");
+
+
+        }
+
+        function addStylingToCell(myCellObj, i, j, row, col) {
+            myCellObj.removeClass("dummyCell");
+            myCellObj.addClass("cell");
+            myCellObj.attr("row", i);
+            myCellObj.attr("col", j);
+            myCellObj.attr("id", "cell_" + i + "x" + j);
+            myCellObj.css("visibility", "visible");
+            // alert(cellCopy.html); 
+            $("#container").append(myCellObj);
+            var width = (100 / row) - 2;
+            myCellObj.css("width", width + "%");
+            myCellObj.css("width", width + "%");
+
+
+        }
+
+
+
+    </script>
 </head>
 
 <body>
+    <div class="game">
+        <div id="container"> </div>
 
-<div id="container" > </div>   
-<div class="dummyCell" ><button></button></div> 
+    </div>
+
+    <div class="dummyCell"> </div>
 </body>
+
 </html>
