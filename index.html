@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+    .cell {
+        visibility: hidden;
+    }
+    .para{
+        visibility: hidden;
+    }
+    #container {
+    width: 500px;
+    height: 300px;
+    background-color: red;
+    display:flex;
+    flex-wrap: wrap;
+    text-align: center;
+    justify-content: space-evenly;
+    } 
+    </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script> 
+
+$(document).ready(function(){
+
+
+var row,col;
+var dimensions=prompt("Enter dimensions in nXn format", "5x5");
+
+if (name!=null){
+    const myArr=dimensions.split("x");
+    //alert(myArr)
+       row=myArr[0]
+       col=myArr[1]
+       x="You chose " + row + " Rows and "+col+" Columns";
+    //  alert(x);
+}
+let containerHeight=$("#container").css("height");
+//alert(containerHeight);
+let containerWidth=$("#container").css("width");
+//alert(containerWidth);
+
+for(let i=0;i<col;i++){
+    for(let j=0;j<row;j++){
+        
+    var cellCopy=$(".dummyCell").clone();
+    cellCopy.removeClass("dummyCell");
+    cellCopy.addClass("cell");
+    cellCopy.attr("row",row);
+    cellCopy.attr("col",col);
+    cellCopy.attr("id",i+"x"+j);
+    cellCopy.css("visibility","visible");
+   // alert(cellCopy.html); 
+    $("#container").append(cellCopy);  
+    }
+
+}
+
+
+
+});
+</script>
+</head>
+
+<body>
+
+<div id="container" > </div>   
+<div class="dummyCell" ><button></button></div> 
+</body>
+</html>
